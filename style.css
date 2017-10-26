@@ -1,0 +1,18 @@
+#header {
+	background-color: black;
+	text-align: center;
+}
+
+h1 {
+	color : white;
+	padding: 10px;
+	padding-left: 750px;
+}
+
+body {
+	background-image: url("images/backgr.jpg");
+}
+
+#log {
+	padding: 10px;
+}
