@@ -1,3 +1,13 @@
+<?php
+
+session_start();
+if (isset($_SESSION['username'])) {
+} else {
+	//user is guest
+	header("Location: login.php");
+}
+
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,19 +36,21 @@
 	<div id="pagr" class="container">
 		<div class="row">
 			<div class="col-md-8">
-				<button id="new" type="button" class="btn btn-info">New game</button><br><br>
-				<button onclick="roll()" type="button" class="btn btn-info">Roll dices</button><br><br>
+				<button onclick="new_game()" id="new" type="button" class="btn btn-info">New game</button><br><br>
+				<button id="rd" onclick="roll()" type="button" class="btn btn-info">Roll dices</button><br><br>
 				 <div class="row">
-					<div id="dice1" class="col-md-4"></div>
-					<div id="dice2" class="col-md-4">dgfhdfg</div>
-					<div id="dice3" class="col-md-4">dfhgdfghfdgh</div>
+					<div id="dice11" class="dice col-md-4">	<img  id="dice1" src=""></div>
+					<div id="dice22" class="dice col-md-4">	<img  id="dice2" src=""></div>
+					<div id="dice33" class="dice col-md-4">	<img  id="dice3" src=""></div>
 				</div>
 			</div>
-			<div class="col-md-4">
-
+			<div id="lentele" class="col-md-4"><br>
+				 <div class="row">
+				 	 <div id="wonn" class="col-md-4">Labas</div>
+				 </div>
 			</div>
 		</div>
 	</div>
-
+<script src="game.js"></script>
 </body>
 </html>

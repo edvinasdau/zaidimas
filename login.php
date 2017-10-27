@@ -4,9 +4,9 @@ session_start();
 if (isset($_POST['username'])){
 
 	try {
-		$conn = new PDO("mysql:host=localhost;dbname=students;charset=utf8", "root", "");
+		$conn = new PDO("mysql:host=localhost;dbname=game;charset=utf8", "root", "");
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$statement = $conn->prepare("SELECT * FROM userss WHERE username = :username");
+		$statement = $conn->prepare("SELECT * FROM players WHERE username = :username");
 		$statement->bindParam(':username', $_POST['username']);
 		$statement->execute();
 		$user_data = $statement->fetch(PDO::FETCH_ASSOC);
@@ -18,10 +18,10 @@ if (isset($_POST['username'])){
 	if(password_verify($_POST['password'], $user_data['password'])){
 			
 		$_SESSION['username'] = $_POST['username'];
-		$_SESSION['level'] = $user_data['level'];
-		$_SESSION['last_login'] = date("Y-m-d H:m:s");
+		// $_SESSION['level'] = $user_data['level'];
+		// $_SESSION['last_login'] = date("Y-m-d H:m:s");
 		
-		setcookie("sausainis_username", $user_data['username'], time() + 86400*7, "/");
+		// setcookie("sausainis_username", $user_data['username'], time() + 86400*7, "/");
 		header("location: index.php");	
 		} else {
 			echo "Check your username or pw";
@@ -48,13 +48,12 @@ if (isset($_POST['username'])){
 			<div class="col-sm-8">
 			</div>
 			<div class="col-sm-4">
-					<form method="post">
-						<form method="POST">
-							<input type="text" name="username" placeholder="username">&nbsp
-							<input type="password" name="password" placeholder="password">&nbsp
-							<a href="login.php" class="btn btn-success">Login</a>
-						</form>	
-				</form>
+				<form method="POST">
+					<input type="text" name="username" placeholder="username">&nbsp
+					<input type="password" name="password" placeholder="password">&nbsp
+					<button class="btn btn - success">Login</button>
+					<a href="register.php" class="btn btn-success">Register</a>
+				</form>	
 			</div>
 		</div>
 	</div>

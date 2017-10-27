@@ -7,18 +7,18 @@ $errors = [];
 if (isset($_POST['username']) && ($_POST['password']) == ($_POST['repeat_password'])){
 	
 	try {
-		$conn = new PDO("mysql:host=localhost;dbname=students;charset=utf8", "root", "");
+		$conn = new PDO("mysql:host=localhost;dbname=game;charset=utf8", "root", "");
 		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	$statement = $conn->prepare("SELECT * FROM userss WHERE username = :username");
+	$statement = $conn->prepare("SELECT * FROM players WHERE username = :username");
 			$statement->bindParam(':username', $_POST['username']);
 			$statement->execute();
 			$user_data = $statement->fetch(PDO::FETCH_ASSOC);
-
+			
 			if($user_data > 0){
 				$errors[] = "Such user already exists. <br>Please try different username";
 			} else {
-		$statement = $conn->prepare("INSERT INTO userss (username, password)
+		$statement = $conn->prepare("INSERT INTO players (username, password)
 			VALUES (:username, :password)");
 		$statement->bindParam(':username', $_POST['username']);
 		$crypt = password_hash($_POST['password'],PASSWORD_DEFAULT);
@@ -54,7 +54,6 @@ if (isset($_POST['username']) && ($_POST['password']) == ($_POST['repeat_passwor
 			</div>
 			<div class="col-sm-4">
 				<form method="POST">
-					<form method="post">
 					<input id="username" type="text" name="username" placeholder="username">
 					<input id="pw" type="password" name="password" placeholder="password">
 					<input id="pw_r" type="password" name="repeat_password" placeholder="repeat_password">
