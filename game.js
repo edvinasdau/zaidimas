@@ -5,6 +5,8 @@ var win = 0;
 won = [];
 prize = [];
 skaiciai= [];
+
+//metami kauliukai
 function roll(){
 	skaiciai = [];
 	if (!gameover) {	
@@ -19,43 +21,61 @@ function roll(){
 		//console.log(skaiciai[]);
 		if(skaiciai[0] == skaiciai[1] || skaiciai[0] == skaiciai[2]){
 			won.push(skaiciai[0]*0.1);
-			document.getElementById("lentele").innerHTML += "Win "+ skaiciai[0]*0.1.toFixed(2);
+			//document.getElementById("lentele").innerHTML += "Win "+ skaiciai[0]*0.1.toFixed(2);
 		}  else if (skaiciai[1] == skaiciai[2]){		
 			won.push(skaiciai[1]*0.1);	
-			document.getElementById("lentele").innerHTML +="Win "+ skaiciai[1]*0.1.toFixed(2);
+			//document.getElementById("lentele").innerHTML +="Win "+ skaiciai[1]*0.1.toFixed(2);
 		} 	
-			 total=0;
-			for(var i in won) { total += won[i]; }
-				document.getElementById("wonn").innerHTML ="Total win "+ total;
-			console.log(total);
-			//document.getElementById("won").innerHTML = "total win "+ total[0];
-	} 
-	check_gameover();
-}
+		total=0;
+		for(var i in won) { total += won[i]; }
+			document.getElementById("wonn").innerHTML ="Win "+ total.toFixed(2);
+		console.log(total);
 
-
-function check_gameover() {
-	if (lucky.length < 4) {
-
-	} else {
-		gameover = true;
-		//document.getElementById("won").innerHTML ="Total win "+ won[0]+ won[1]+ won[2]+ won[3];
-		
+		} 
+		check_gameover();
 	}
-}
 
-function new_game() {
-	if (gameover) {
-		document.getElementById("dice1").src = "";
-		document.getElementById("dice2").src = "";
-		document.getElementById("dice3").src = "";
-		lucky = [];
-		gameover = false;
-		won = [];
-		prize = [];
-		skaiciai= [];
-	} else {
-		alert("game is not over yet!");
+
+	function check_gameover() {
+		if (lucky.length < 4) {
+
+		} else {
+			document.getElementById("rd").disabled = true; 
+			document.getElementById("wonn").innerHTML = "Your TOTAL prize is : " + total.toFixed(2);  		
+			if (total > 0) {
+				document.getElementById("prize").src = "images/win.jpg";
+			} else {
+				document.getElementById("prize").src = "images/lose.jpg";
+			}
+			gameover = true;
+			kelk();
+
+		}
 	}
-}
 
+	function new_game() {
+		if (gameover) {
+			document.getElementById("prize").src = "";
+			document.getElementById("dice1").src = "";
+			document.getElementById("dice2").src = "";
+			document.getElementById("dice3").src = "";
+			document.getElementById("wonn").innerHTML = "";
+			lucky = [];
+			gameover = false;
+			 document.getElementById("rd").disabled = false;   
+			won = [];
+			prize = [];
+			skaiciai= [];
+		}
+	}
+
+	function kelk(){
+		$.post("game.php",
+		{
+			result: total,
+
+		}, function (data){
+			console.log(data);
+		}
+		);
+	};

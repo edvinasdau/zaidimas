@@ -1,30 +1,36 @@
 <?php
+header("Content-type:application/json");
+session_start();
+try {
+	$conn = new PDO("mysql:host=localhost;dbname=game;charset=utf8", "root", "");
+	$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	//echo "Connected successfully";
 
-	function roll(){
-	$dice1 = rand(1, 6);
-	if ($dice1 ==1) {echo "<img src=images/1.jpg>";
-	} elseif ($dice1 ==2) {echo "<img src=images/2.jpg>";
-	} elseif ($dice1 == 3) {echo "<img src=images/3.jpg>";
-	} elseif ($dice1 == 4){echo "<img src=images/4.jpg>";
-	} elseif ($dice1 == 5){echo "<img src=images/5.jpg>";
-	} elseif ($dice1 == 6){echo "<img src=images/6.jpg>";
+	if (isset($_POST['result'])) {
+
+		$statement = $conn->prepare("INSERT INTO stats (username, result, ip) VALUES (:username, :result, :ip)");
+		$statement->bindParam(':username', $_SESSION['username']);
+		$statement->bindParam(':result', $_POST['result']);
+		$statement->bindParam(':ip', $_SERVER["REMOTE_ADDR"]);
+		$statement->execute();
+		
+
+	} else if (isset($_GET['opa'])) {
+		//gaunu tik sesijos zaidejo statistika
+		$statement = $conn->prepare("SELECT * FROM stats WHERE username = :username");
+		$statement->bindParam(':username', $_SESSION['username']);
+		$statement->execute();
+		$response = $statement->fetchAll(PDO::FETCH_ASSOC);
+		//visu zaideju statistika
+	} else {
+		$statement = $conn->prepare("SELECT * FROM stats");
+		$statement->execute();
+		$response = $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
+	$conn = null;
+} catch(PDOException $e) {
+	$response['message'] = ['type' => 'danger','body' => $e->getMessage()];
 }
-	$dice2 = rand(1, 6);
-	if ($dice1 ==1) {echo "<img src=images/1.jpg>";
-	} elseif ($dice1 ==2) {echo "<img src=images/2.jpg>";
-	} elseif ($dice1 == 3) {echo "<img src=images/3.jpg>";
-	} elseif ($dice1 == 4){echo "<img src=images/4.jpg>";
-	} elseif ($dice1 == 5){echo "<img src=images/5.jpg>";
-	} elseif ($dice1 == 6){echo "<img src=images/6.jpg>";
-	}
 
-	$dice3 = rand(1, 6);
-	if ($dice1 ==1) {echo "<img src=images/1.jpg>";
-	} elseif ($dice1 ==2) {echo "<img src=images/2.jpg>";
-	} elseif ($dice1 == 3) {echo "<img src=images/3.jpg>";
-	} elseif ($dice1 == 4){echo "<img src=images/4.jpg>";
-	} elseif ($dice1 == 5){echo "<img src=images/5.jpg>";
-	} elseif ($dice1 == 6){echo "<img src=images/6.jpg>";
-	}
-?>
+//print_r($response);
+echo json_encode($response);
